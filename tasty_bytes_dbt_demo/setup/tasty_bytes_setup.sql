@@ -1,11 +1,5 @@
 USE ROLE training_role;
--- CREATE OR REPLACE WAREHOUSE tasty_bytes_dbt_wh
---     WAREHOUSE_SIZE = 'small'
---     WAREHOUSE_TYPE = 'standard'
---     AUTO_SUSPEND = 60
---     AUTO_RESUME = TRUE
---     INITIALLY_SUSPENDED = TRUE
---     COMMENT = 'warehouse for tasty bytes dbt demo';
+
 USE WAREHOUSE animal_task_wh;
 
 CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db;
@@ -13,24 +7,21 @@ CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.raw;
 CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.dev;
 CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.prod;
 
+CREATE OR REPLACE SECRET my_git_secret
+  TYPE = password
+  USERNAME = 'REPLACE with you GitHub username'
+  PASSWORD = 'REPLACE with your classic token';
+  
+CREATE OR REPLACE API INTEGRATION my_git_api
+  API_PROVIDER = git_https_api
+  API_ALLOWED_PREFIXES = ('https://github.com/')
+  ALLOWED_AUTHENTICATION_SECRETS = (my_git_secret)
+  ENABLED = TRUE;
 
--- ALTER SCHEMA tasty_bytes_dbt_db.dev SET LOG_LEVEL = 'INFO';
--- ALTER SCHEMA tasty_bytes_dbt_db.dev SET TRACE_LEVEL = 'ALWAYS';
--- ALTER SCHEMA tasty_bytes_dbt_db.dev SET METRIC_LEVEL = 'ALL';
--- ALTER SCHEMA tasty_bytes_dbt_db.prod SET LOG_LEVEL = 'INFO';
--- ALTER SCHEMA tasty_bytes_dbt_db.prod SET TRACE_LEVEL = 'ALWAYS';
--- ALTER SCHEMA tasty_bytes_dbt_db.prod SET METRIC_LEVEL = 'ALL';
--- CREATE OR REPLACE API INTEGRATION git_integration
---   API_PROVIDER = git_https_api
---   API_ALLOWED_PREFIXES = ('https://github.com/')
---   ENABLED = TRUE;
--- CREATE OR REPLACE NETWORK RULE tasty_bytes_dbt_db.public.dbt_network_rule
---   MODE = EGRESS
---   TYPE = HOST_PORT
---   VALUE_LIST = ('hub.getdbt.com', 'codeload.github.com');
--- CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION dbt_access_integration
---   ALLOWED_NETWORK_RULES = (tasty_bytes_dbt_db.public.dbt_network_rule)
---   ENABLED = true;
+CREATE OR REPLACE GIT REPOSITORY snowflake_dbt_demo
+  ORIGIN = 'REPLACE with your GitHub repo link'
+  API_INTEGRATION = my_git_api
+  GIT_CREDENTIALS = my_git_secret;
 
 CREATE OR REPLACE FILE FORMAT tasty_bytes_dbt_db.public.csv_ff 
 type = 'csv';
