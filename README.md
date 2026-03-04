@@ -75,3 +75,6 @@ The same model names appear in all three schemas, but at different stages of tra
    - `TB_101.PROD` — identical structure to DEV but contains production-quality, tested, and approved transformations that business users and dashboards rely on
 
 This layered pattern ensures broken SQL or failed tests never reach production, and that dev work never disrupts live reporting.
+
+## Resources:
+https://www.snowflake.com/en/developers/guides/getting-started-with-dbt-projects-on-snowflake/
