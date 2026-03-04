@@ -6,7 +6,7 @@ tasty_bytes:
       account: 'not needed'
       user: 'not needed'
       role: TRAINING_ROLE
-      database: TASTY_BYTES_DBT_DB
+      database: TB_101
       schema: dev
       warehouse: ANIMAL_TASK_WH
     prod:
@@ -14,6 +14,6 @@ tasty_bytes:
       account: 'not needed'
       user: 'not needed'
       role: TRAINING_ROLE
-      database: tasty_bytes_dbt_db
+      database: TB_101
       schema: prod
       warehouse: ANIMAL_TASK_WH
